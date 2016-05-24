@@ -21,8 +21,7 @@ import static org.junit.Assert.*;
 public class BankTests {
     IBank bank;
     
-    public BankTests() {
-         bank = new Bank("BBBank");
+    public BankTests() {        
     }
     
     @BeforeClass
@@ -35,6 +34,7 @@ public class BankTests {
     
     @Before
     public void setUp() {
+         bank = new Bank("BBBank");
     }
     
     @After
