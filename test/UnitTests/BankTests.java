@@ -5,6 +5,8 @@
  */
 package UnitTests;
 
+import bank.bankieren.Bank;
+import bank.bankieren.IBank;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -14,11 +16,13 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author ruud
+ * @author ruud en joël
  */
 public class BankTests {
+    IBank bank;
     
     public BankTests() {
+         bank = new Bank("BBBank");
     }
     
     @BeforeClass
@@ -42,4 +46,21 @@ public class BankTests {
     //
     // @Test
     // public void hello() {}
+    @Test
+    public void testOpenRekeningEersteRekening(){
+      assertNotEquals(-1, bank.openRekening("Ruud", "Hegelsom"));
+    }
+    @Test
+    public void testOpenRekeningExtraRekening(){
+        bank.openRekening("Ruud","Hegelsom");
+        assertNotEquals(-1, bank.openRekening("Ruud","Hegelsom"));
+    }
+    @Test
+    public void testOpenRekeningGeenNaam(){
+        assertEquals(-1, bank.openRekening("", "Eindhoven"));
+    }
+    @Test
+    public void testOpenRekeningGeenWoonplaats() {
+        assertEquals(-1, bank.openRekening("Ruud", ""));
+    }
 }
