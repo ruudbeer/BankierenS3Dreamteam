@@ -63,4 +63,8 @@ public class BankTests {
     public void testOpenRekeningGeenWoonplaats() {
         assertEquals(-1, bank.openRekening("Ruud", ""));
     }
+    @Test
+    public void testOpenRekeingGeenAlles(){
+        assertEquals(-1, bank.openRekening("", ""));
+    }
 }

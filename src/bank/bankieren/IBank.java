@@ -35,7 +35,8 @@ public interface IBank {
      *            is groter dan 0
      * @return <b>true</b> als de overmaking is gelukt, anders <b>false</b>
      * @throws NumberDoesntExistException
-     *             als een van de twee bankrekeningnummers onbekend is
+     *             als een van de twee bankrekeningnummers onbeken
+     *             als ed is
      */
     boolean maakOver(int bron, int bestemming, Money bedrag)
             throws NumberDoesntExistException;
