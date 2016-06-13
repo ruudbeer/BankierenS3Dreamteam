@@ -1,6 +1,6 @@
 package bank.bankieren;
 
-class Rekening implements IRekeningTbvBank {
+public class Rekening implements IRekeningTbvBank {
 
     private static final long serialVersionUID = 7221569686169173632L;
     private static final int KREDIETLIMIET = -10000;

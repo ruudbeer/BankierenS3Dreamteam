@@ -1,6 +1,6 @@
 package bank.bankieren;
 
-class Klant implements IKlant {
+public class Klant implements IKlant {
 
 	/**
 	 * 
