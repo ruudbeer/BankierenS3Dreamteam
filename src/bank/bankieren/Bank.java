@@ -1,9 +1,21 @@
 package bank.bankieren;
-
-import fontys.util.*;
-
+ 
+import fontys.util.NumberDoesntExistException;
+import fontyspublisher.Publisher;
 import java.rmi.RemoteException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+
+
+
+
 
 public class Bank implements IBank {
 
@@ -15,6 +27,8 @@ public class Bank implements IBank {
 	private Collection<IKlant> clients;
 	private int nieuwReknr;
 	private String name;
+	
+	
 
 	public Bank(String name) {
 		accounts = new HashMap<Integer,IRekeningTbvBank>();
@@ -22,13 +36,20 @@ public class Bank implements IBank {
 		nieuwReknr = 100000000;	
 		this.name = name;	
 	}
+	
+	 
 
-	public int openRekening(String name, String city) {
+	public synchronized int openRekening(String name, String city) {
 		if (name.equals("") || city.equals(""))
 			return -1;
 
 		IKlant klant = getKlant(name, city);
-		IRekeningTbvBank account = new Rekening(nieuwReknr, klant, Money.EURO);
+		IRekeningTbvBank account = null;
+		try {
+			account = new Rekening(nieuwReknr, klant, Money.EURO);
+		} catch (RemoteException ex) {
+			Logger.getLogger(Bank.class.getName()).log(Level.SEVERE, null, ex);
+		}
 		accounts.put(nieuwReknr,account);
 		nieuwReknr++;
 		return nieuwReknr-1;
@@ -48,7 +69,7 @@ public class Bank implements IBank {
 		return accounts.get(nr);
 	}
 
-	public boolean maakOver(int source, int destination, Money money)
+	public synchronized boolean maakOver(int source, int destination, Money money)
 			throws NumberDoesntExistException {
 		if (source == destination)
 			throw new RuntimeException(
@@ -83,4 +104,6 @@ public class Bank implements IBank {
 		return name;
 	}
 
-}
+
+		
+	}

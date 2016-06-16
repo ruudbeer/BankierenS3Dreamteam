@@ -6,10 +6,11 @@ import bank.bankieren.IRekening;
 import bank.bankieren.Money;
 import fontys.util.InvalidSessionException;
 import fontys.util.NumberDoesntExistException;
+import fontyspublisher.IRemotePublisherForListener;
 
-public interface IBankiersessie extends Remote {
+public interface IBankiersessie extends Remote, IRemotePublisherForListener{
 	
-	long GELDIGHEIDSDUUR = 600000; 
+	long GELDIGHEIDSDUUR = 600; 
 	/**
 	 * @returns true als de laatste aanroep van getRekening of maakOver voor deze
 	 *          sessie minder dan GELDIGHEIDSDUUR geleden is

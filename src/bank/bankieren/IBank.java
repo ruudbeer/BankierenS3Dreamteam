@@ -1,12 +1,14 @@
 package bank.bankieren;
 
 import fontys.util.*;
+import java.util.Observer;
+import javafx.beans.Observable;
 
 /**
  * @author 871059
  * 
  */
-public interface IBank {
+public interface IBank{
 
     /**
      * creatie van een nieuwe bankrekening met een identificerend rekeningnummer; 
@@ -51,4 +53,5 @@ public interface IBank {
      * @return de naam van deze bank
      */
     String getName();
+	
 }
