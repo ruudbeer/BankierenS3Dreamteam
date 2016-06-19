@@ -13,6 +13,8 @@ import bank.bankieren.Klant;
 import bank.bankieren.Money;
 import bank.bankieren.Rekening;
 import fontys.util.NumberDoesntExistException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -36,7 +38,7 @@ public class BankTests {
     }
 
     @Before
-    public void setUp() {
+    public void setUp() throws RemoteException, NotBoundException {
         bank = new Bank("BBBank");
         rek = bank.openRekening("Henk", "eindje");
         rek2 = bank.openRekening("toine", "hegelsom");
@@ -104,9 +106,6 @@ public class BankTests {
        assertEquals(null,bank.getRekening(5477878));
     }
 
-    @Test
-    public void testGetName(){
-        assertEquals("BBBank", bank.getName());
-    }
+    
     
 }

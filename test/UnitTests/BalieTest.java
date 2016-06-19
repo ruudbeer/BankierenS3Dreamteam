@@ -7,6 +7,7 @@ package UnitTests;
 
 import bank.bankieren.Bank;
 import bank.internettoegang.Balie;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -32,7 +33,7 @@ public class BalieTest {
 	
 	String login;
 	@Before
-	public void setUp() throws RemoteException {
+	public void setUp() throws RemoteException, NotBoundException {
 		bank = new Bank("bankie");
 		balie = new Balie(bank);
 		

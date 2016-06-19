@@ -15,6 +15,7 @@ import bank.internettoegang.IBankiersessie;
 import fontys.util.InvalidSessionException;
 import fontys.util.NegativeNumberException;
 import fontys.util.NumberDoesntExistException;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,7 +41,7 @@ public class BankiersessieTest {
 	private int rekening2;
 
 	@Before
-	public void setUp() {
+	public void setUp() throws RemoteException, NotBoundException {
 		bank = new Bank("Bank1");
 		rekening1 = bank.openRekening("Rekening1", "Eindhoven");
 		rekening2 = bank.openRekening("Rekening2", "Eindhoven");
