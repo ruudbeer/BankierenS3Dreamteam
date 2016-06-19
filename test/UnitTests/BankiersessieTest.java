@@ -13,6 +13,7 @@ import bank.internettoegang.Balie;
 import bank.internettoegang.Bankiersessie;
 import bank.internettoegang.IBankiersessie;
 import fontys.util.InvalidSessionException;
+import fontys.util.NegativeNumberException;
 import fontys.util.NumberDoesntExistException;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
@@ -78,7 +79,7 @@ public class BankiersessieTest {
 	 * Test of de MaakOver methode ook echt werkt en saldo af- en bijschrijft.
 	 */
 	@Test
-	public void testMaakOver() throws NumberDoesntExistException, InvalidSessionException, RemoteException {
+	public void testMaakOver() throws NumberDoesntExistException, InvalidSessionException, RemoteException, NegativeNumberException {
 		Money SaldoRekening1 = bank.getRekening(rekening1).getSaldo();
 		Money SaldoRekening2 = bank.getRekening(rekening2).getSaldo();
 		Money Plus = new Money(1000, Money.EURO);
@@ -94,8 +95,8 @@ public class BankiersessieTest {
 	/**
 	 * Test of de MaakOver methode ook echt werkt en saldo af- en bijschrijft.
 	 */
-	@Test
-	public void testMaakOverNegatiefGeld() throws NumberDoesntExistException, InvalidSessionException, RemoteException {
+	@Test(expected = NegativeNumberException.class)
+	public void testMaakOverNegatiefGeld() throws NumberDoesntExistException, InvalidSessionException, RemoteException, NegativeNumberException {
 
 		Money Min = new Money(-1000, Money.EURO);
 
@@ -107,7 +108,7 @@ public class BankiersessieTest {
 	 * Test of de MaakOver methode ook echt werkt en saldo af- en bijschrijft.
 	 */
 	@Test(expected = NumberDoesntExistException.class)
-	public void testMaakOverInvalidNumber() throws NumberDoesntExistException {
+	public void testMaakOverInvalidNumber() throws NumberDoesntExistException, NegativeNumberException {
 		Money Plus = new Money(1000, Money.EURO);
 		try {
 			boolean bool = sessie.maakOver(23456, Plus);
@@ -123,7 +124,7 @@ public class BankiersessieTest {
 	 * Test of de MaakOver methode ook echt werkt en saldo af- en bijschrijft.
 	 */
 	@Test(expected = InvalidSessionException.class)
-	public void testMaakOverInvalidSession() throws InvalidSessionException, InterruptedException {
+	public void testMaakOverInvalidSession() throws InvalidSessionException, InterruptedException, NegativeNumberException {
 		Thread.sleep(IBankiersessie.GELDIGHEIDSDUUR + 30);
 		Money Plus = new Money(1000, Money.EURO);
 		try {

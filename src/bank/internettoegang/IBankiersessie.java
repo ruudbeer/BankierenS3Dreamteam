@@ -5,6 +5,7 @@ import java.rmi.RemoteException;
 import bank.bankieren.IRekening;
 import bank.bankieren.Money;
 import fontys.util.InvalidSessionException;
+import fontys.util.NegativeNumberException;
 import fontys.util.NumberDoesntExistException;
 import fontyspublisher.IRemotePublisherForListener;
 
@@ -36,7 +37,7 @@ public interface IBankiersessie extends Remote, IRemotePublisherForListener{
 	 */
 	boolean maakOver(int bestemming, Money bedrag)
 			throws NumberDoesntExistException, InvalidSessionException,
-			RemoteException;
+			RemoteException, NegativeNumberException;
 
 	/**
 	 * sessie wordt beeindigd

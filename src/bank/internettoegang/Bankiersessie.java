@@ -9,6 +9,7 @@ import bank.bankieren.Money;
 import bank.bankieren.Rekening;
 
 import fontys.util.InvalidSessionException;
+import fontys.util.NegativeNumberException;
 import fontys.util.NumberDoesntExistException;
 import fontys.util.PropertieNamen;
 import fontyspublisher.IRemotePropertyListener;
@@ -50,7 +51,7 @@ public class Bankiersessie extends UnicastRemoteObject implements
 	@Override
 	public boolean maakOver(int bestemming, Money bedrag)
 			throws NumberDoesntExistException, InvalidSessionException,
-			RemoteException {
+			RemoteException, NegativeNumberException{
 		System.out.println("Update laatste aanroep in maakOver");
 		updateLaatsteAanroep();
 		
@@ -58,7 +59,7 @@ public class Bankiersessie extends UnicastRemoteObject implements
 			throw new RuntimeException(
 					"source and destination must be different");
 		if (!bedrag.isPositive())
-			throw new RuntimeException("amount must be positive");
+			throw new NegativeNumberException("amount must be positive");
 		if (bank.getRekening(bestemming) == null){
 			throw new NumberDoesntExistException("Didnt find bankNumber");
 		}

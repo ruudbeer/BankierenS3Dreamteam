@@ -10,6 +10,7 @@ import bank.bankieren.Money;
 import bank.internettoegang.IBalie;
 import bank.internettoegang.IBankiersessie;
 import fontys.util.InvalidSessionException;
+import fontys.util.NegativeNumberException;
 import fontys.util.NumberDoesntExistException;
 import fontyspublisher.IRemotePropertyListener;
 import java.beans.PropertyChangeEvent;
@@ -150,6 +151,8 @@ public class BankierSessieController implements Initializable, IRemotePropertyLi
 		{
 			e1.printStackTrace();
 			taMessage.setText(e1.getMessage());
+		} catch (NegativeNumberException ex) {
+			Logger.getLogger(BankierSessieController.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
 

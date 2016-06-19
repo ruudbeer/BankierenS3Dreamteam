@@ -1,5 +1,5 @@
 package bank.bankieren;
- 
+
 import fontys.util.NumberDoesntExistException;
 import fontyspublisher.Publisher;
 import java.rmi.RemoteException;
@@ -12,36 +12,28 @@ import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
-
-
-
-
-public class Bank implements IBank {
+public class Bank implements IBank, IRekeningMuteerder {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -8728841131739353765L;
-	private Map<Integer,IRekeningTbvBank> accounts;
+	private Map<Integer, IRekeningTbvBank> accounts;
 	private Collection<IKlant> clients;
 	private int nieuwReknr;
 	private String name;
-	
-	
 
 	public Bank(String name) {
-		accounts = new HashMap<Integer,IRekeningTbvBank>();
+		accounts = new HashMap<Integer, IRekeningTbvBank>();
 		clients = new ArrayList<IKlant>();
-		nieuwReknr = 100000000;	
-		this.name = name;	
+		nieuwReknr = 100000000;
+		this.name = name;
 	}
-	
-	 
 
 	public synchronized int openRekening(String name, String city) {
-		if (name.equals("") || city.equals(""))
+		if (name.equals("") || city.equals("")) {
 			return -1;
+		}
 
 		IKlant klant = getKlant(name, city);
 		IRekeningTbvBank account = null;
@@ -50,15 +42,16 @@ public class Bank implements IBank {
 		} catch (RemoteException ex) {
 			Logger.getLogger(Bank.class.getName()).log(Level.SEVERE, null, ex);
 		}
-		accounts.put(nieuwReknr,account);
+		accounts.put(nieuwReknr, account);
 		nieuwReknr++;
-		return nieuwReknr-1;
+		return nieuwReknr - 1;
 	}
 
 	private IKlant getKlant(String name, String city) {
 		for (IKlant k : clients) {
-			if (k.getNaam().equals(name) && k.getPlaats().equals(city))
+			if (k.getNaam().equals(name) && k.getPlaats().equals(city)) {
 				return k;
+			}
 		}
 		IKlant klant = new Klant(name, city);
 		clients.add(klant);
@@ -71,31 +64,38 @@ public class Bank implements IBank {
 
 	public synchronized boolean maakOver(int source, int destination, Money money)
 			throws NumberDoesntExistException {
-		if (source == destination)
+		if (source == destination) {
 			throw new RuntimeException(
 					"cannot transfer money to your own account");
-		if (!money.isPositive())
+		}
+		if (!money.isPositive()) {
 			throw new RuntimeException("money must be positive");
+		}
 
 		IRekeningTbvBank source_account = (IRekeningTbvBank) getRekening(source);
-		if (source_account == null)
+		if (source_account == null) {
 			throw new NumberDoesntExistException("account " + source
 					+ " unknown at " + name);
+		}
 
 		Money negative = Money.difference(new Money(0, money.getCurrency()),
 				money);
 		boolean success = source_account.muteer(negative);
-		if (!success)
+		if (!success) {
 			return false;
+		}
 
 		IRekeningTbvBank dest_account = (IRekeningTbvBank) getRekening(destination);
-		if (dest_account == null) 
+		if (dest_account == null) {
 			throw new NumberDoesntExistException("account " + destination
 					+ " unknown at " + name);
+		}
 		success = dest_account.muteer(money);
 
 		if (!success) // rollback
+		{
 			source_account.muteer(money);
+		}
 		return success;
 	}
 
@@ -104,6 +104,15 @@ public class Bank implements IBank {
 		return name;
 	}
 
+	@Override
+	public boolean muteer(int rekeningNummer, Money amount) {
+		Rekening rekening = (Rekening) getRekening(rekeningNummer);
+		if (rekening != null) {
+			rekening.muteer(amount);
+			return true;
+		}
+		return false;
 
-		
 	}
+
+}
