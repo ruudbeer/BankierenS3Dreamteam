@@ -40,7 +40,9 @@ public class OverboekCentrale extends UnicastRemoteObject implements ICentrale {
 	public boolean registreerBank(IRekeningMuteerder bank) throws RemoteException {
 		if (!banken.contains(bank)) {
 			banken.add(bank);
+			System.out.println(bank.getName());
 			return true;
+			
 		} else {
 			return false;
 		}
@@ -54,7 +56,7 @@ public class OverboekCentrale extends UnicastRemoteObject implements ICentrale {
 		Money afschrijfGeld = new Money(amount.getCents()*-1, amount.getCurrency());
 
 		sourceBank.muteer(destination, amount);
-		sourceBank.muteer(source, afschrijfGeld);
+		DestinationBank.muteer(source, afschrijfGeld);
 		return true;
 	}
 

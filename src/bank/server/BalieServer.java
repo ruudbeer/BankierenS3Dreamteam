@@ -13,6 +13,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -52,7 +54,7 @@ public class BalieServer extends Application {
         }
     }
 
-    public boolean startBalie(String nameBank) {
+    public boolean startBalie(String nameBank) throws RemoteException, NotBoundException {
             
             FileOutputStream out = null;
             try {

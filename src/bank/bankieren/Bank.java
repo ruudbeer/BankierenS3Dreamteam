@@ -1,8 +1,12 @@
 package bank.bankieren;
 
+import CentraleBank.OverboekCentrale;
 import fontys.util.NumberDoesntExistException;
 import fontyspublisher.Publisher;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -22,12 +26,23 @@ public class Bank implements IBank, IRekeningMuteerder {
 	private Collection<IKlant> clients;
 	private int nieuwReknr;
 	private String name;
-
-	public Bank(String name) {
+	private OverboekCentrale centrale;
+	
+	public Bank(String name) throws RemoteException, NotBoundException{
 		accounts = new HashMap<Integer, IRekeningTbvBank>();
 		clients = new ArrayList<IKlant>();
 		nieuwReknr = 100000000;
 		this.name = name;
+		
+		Registry reg;
+		try {
+			reg = LocateRegistry.getRegistry("127.0.0.1",777);
+			centrale = (OverboekCentrale)reg.lookup("centrale");
+			centrale.registreerBank(this);
+		} catch (RemoteException ex) {
+			
+		}
+		
 	}
 
 	public synchronized int openRekening(String name, String city) {
