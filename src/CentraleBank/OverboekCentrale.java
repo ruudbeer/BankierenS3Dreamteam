@@ -60,7 +60,7 @@ public class OverboekCentrale extends UnicastRemoteObject implements ICentrale {
 		return true;
 	}
 
-	private IRekeningMuteerder getBankVanRekeningNummer(int rekeningNummer) throws NumberDoesntExistException{
+	private IRekeningMuteerder getBankVanRekeningNummer(int rekeningNummer) throws NumberDoesntExistException, RuntimeException, RemoteException{
 		String bank = rekeningen.get(rekeningNummer);
 		if (bank != null) {
 			return getBankVanNaam(bank);
@@ -69,7 +69,7 @@ public class OverboekCentrale extends UnicastRemoteObject implements ICentrale {
 		
 	}
 
-	private IRekeningMuteerder getBankVanNaam(String bankNaam) throws RuntimeException {
+	private IRekeningMuteerder getBankVanNaam(String bankNaam) throws RuntimeException, RemoteException {
 		for (IRekeningMuteerder b : banken) {
 			if (b.getName().equals(bankNaam)){
 				return b;

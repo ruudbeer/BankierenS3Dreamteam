@@ -1,5 +1,6 @@
 package bank.bankieren;
 
+import CentraleBank.ICentrale;
 import CentraleBank.OverboekCentrale;
 import fontys.util.NumberDoesntExistException;
 import fontyspublisher.Publisher;
@@ -7,6 +8,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -16,7 +18,7 @@ import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Bank implements IBank, IRekeningMuteerder {
+public class Bank extends UnicastRemoteObject implements IBank, IRekeningMuteerder {
 
 	/**
 	 *
@@ -26,7 +28,7 @@ public class Bank implements IBank, IRekeningMuteerder {
 	private Collection<IKlant> clients;
 	private int nieuwReknr;
 	private String name;
-	private OverboekCentrale centrale;
+	private ICentrale centrale;
 	
 	public Bank(String name) throws RemoteException, NotBoundException{
 		accounts = new HashMap<Integer, IRekeningTbvBank>();
@@ -36,8 +38,8 @@ public class Bank implements IBank, IRekeningMuteerder {
 		
 		Registry reg;
 		try {
-			reg = LocateRegistry.getRegistry("127.0.0.1",777);
-			centrale = (OverboekCentrale)reg.lookup("centrale");
+			reg = LocateRegistry.getRegistry("127.0.0.1",1099);
+			centrale = (ICentrale)reg.lookup("centrale");
 			centrale.registreerBank(this);
 		} catch (RemoteException ex) {
 			
@@ -45,6 +47,7 @@ public class Bank implements IBank, IRekeningMuteerder {
 		
 	}
 
+	@Override
 	public synchronized int openRekening(String name, String city) {
 		if (name.equals("") || city.equals("")) {
 			return -1;

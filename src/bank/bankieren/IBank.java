@@ -49,9 +49,6 @@ public interface IBank{
      */
     IRekening getRekening(int nr);
 
-    /**
-     * @return de naam van deze bank
-     */
-    String getName();
+
 	
 }
