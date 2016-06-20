@@ -16,7 +16,6 @@ import fontyspublisher.IRemotePropertyListener;
 import java.beans.PropertyChangeEvent;
 import java.net.URL;
 import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,6 +27,7 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import fontys.util.PropertieNamen;
+import java.io.Serializable;
 
 /**
  * FXML Controller class
@@ -140,6 +140,7 @@ public class BankierSessieController implements Initializable, IRemotePropertyLi
 				taMessage.setText("can't transfer money to your own account");
 			}
 			long centen = (long) (Double.parseDouble(tfAmount.getText()) * 100);
+			System.out.println("Maak over is ingedrukt");
 			sessie.maakOver(to, new Money(centen, Money.EURO));
 		}
 		catch (RemoteException e1)

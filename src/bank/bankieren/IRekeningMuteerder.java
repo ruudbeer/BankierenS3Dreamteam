@@ -6,6 +6,7 @@
 package bank.bankieren;
 
 import java.rmi.Remote;
+import java.rmi.RemoteException;
 
 /**
  *
@@ -13,7 +14,7 @@ import java.rmi.Remote;
  */
 public interface IRekeningMuteerder extends Remote{
 	
-	boolean muteer(int rekeningNummer,Money amount);
+	boolean muteer(int rekeningNummer,Money amount) throws RemoteException;
 	
-	String getName();
+	String getName() throws RemoteException;
 }

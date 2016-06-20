@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -67,9 +68,9 @@ public class BalieServer extends Application {
                 out = new FileOutputStream(nameBank + ".props");
                 props.store(out, null);
                 out.close();
-                java.rmi.registry.LocateRegistry.createRegistry(port);
+                
                 IBalie balie = new Balie(new Bank(nameBank));
-                Naming.rebind(nameBank, balie);
+                LocateRegistry.getRegistry("127.0.0.1", 1099).rebind(nameBank, balie);
                
                 return true;
 

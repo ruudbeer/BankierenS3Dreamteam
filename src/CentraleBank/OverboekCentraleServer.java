@@ -19,7 +19,7 @@ public class OverboekCentraleServer {
 		
 		try {
 			OverboekCentrale centrale = new OverboekCentrale();
-            Registry reg = LocateRegistry.createRegistry(777);
+            Registry reg = LocateRegistry.createRegistry(1099);
             reg.rebind("centrale", centrale);
             System.out.println("centrale zit in registry");
             new Scanner(System.in).next();
