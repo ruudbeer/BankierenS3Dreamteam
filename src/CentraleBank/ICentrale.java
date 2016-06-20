@@ -17,7 +17,7 @@ import java.rmi.RemoteException;
  * @author Joel
  */
 public interface ICentrale extends Remote{
-	int getNieuwRekeningNummer()throws RemoteException;
+	int getNieuwRekeningNummer(String bankNaam)throws RemoteException;
 	
 	boolean registreerBank(IRekeningMuteerder bank)throws RemoteException;
 	
