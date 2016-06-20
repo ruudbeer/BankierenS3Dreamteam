@@ -9,6 +9,7 @@ import bank.bankieren.IBank;
 import bank.bankieren.IRekening;
 import bank.bankieren.IRekeningMuteerder;
 import bank.bankieren.Money;
+import bank.bankieren.Rekening;
 import fontys.util.NumberDoesntExistException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -61,8 +62,10 @@ public class OverboekCentrale extends UnicastRemoteObject implements ICentrale {
 
 		Money afschrijfGeld = new Money(amount.getCents() * -1, amount.getCurrency());
 
-		sourceBank.muteer(destination, amount);
-		DestinationBank.muteer(source, afschrijfGeld);
+		boolean from  = sourceBank.muteer(source, afschrijfGeld);
+		boolean to = DestinationBank.muteer(destination, amount);
+                System.out.println("from:"+ from);
+                System.out.println("dest:"+to);
 		return true;
 	}
 
