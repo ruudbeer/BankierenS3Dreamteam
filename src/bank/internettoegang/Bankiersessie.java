@@ -52,7 +52,7 @@ public class Bankiersessie extends UnicastRemoteObject implements
 	public boolean maakOver(int bestemming, Money bedrag)
 			throws NumberDoesntExistException, InvalidSessionException,
 			RemoteException, NegativeNumberException{
-
+		System.out.println("Update laatste aanroep in maakOver");
 		updateLaatsteAanroep();
 		
 		if (reknr == bestemming)
@@ -60,8 +60,10 @@ public class Bankiersessie extends UnicastRemoteObject implements
 					"source and destination must be different");
 		if (!bedrag.isPositive())
 			throw new NegativeNumberException("amount must be positive");
-
-		System.out.println("Ga nu overmaken vanuit bankierSessie");
+		if (bank.getRekening(bestemming) == null){
+			throw new NumberDoesntExistException("Didnt find bankNumber");
+		}
+		
 		return bank.maakOver(reknr, bestemming, bedrag);
 	}
 	

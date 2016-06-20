@@ -25,7 +25,6 @@ public class OverboekCentrale extends UnicastRemoteObject implements ICentrale {
 
 	final Map<Integer, String> rekeningen;
 	List<IRekeningMuteerder> banken;
-	int newRekeningNummer = 10000000;
 
 	public OverboekCentrale() throws RemoteException {
 		rekeningen = new HashMap<>();
@@ -33,13 +32,8 @@ public class OverboekCentrale extends UnicastRemoteObject implements ICentrale {
 	}
 
 	@Override
-	public int getNieuwRekeningNummer(String bankNaam) throws RemoteException {
-		synchronized (rekeningen) {
-			newRekeningNummer++;
-			rekeningen.put(newRekeningNummer, bankNaam);
-			return newRekeningNummer;
-		}
-
+	public int getNieuwRekeningNummer() throws RemoteException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 	@Override
@@ -48,7 +42,7 @@ public class OverboekCentrale extends UnicastRemoteObject implements ICentrale {
 			banken.add(bank);
 			System.out.println(bank.getName());
 			return true;
-
+			
 		} else {
 			return false;
 		}
@@ -58,26 +52,26 @@ public class OverboekCentrale extends UnicastRemoteObject implements ICentrale {
 	public boolean maakOver(int source, int destination, Money amount) throws RemoteException, NumberDoesntExistException {
 		IRekeningMuteerder sourceBank = getBankVanRekeningNummer(source);
 		IRekeningMuteerder DestinationBank = getBankVanRekeningNummer(destination);
-
-		Money afschrijfGeld = new Money(amount.getCents() * -1, amount.getCurrency());
+		
+		Money afschrijfGeld = new Money(amount.getCents()*-1, amount.getCurrency());
 
 		sourceBank.muteer(destination, amount);
 		DestinationBank.muteer(source, afschrijfGeld);
 		return true;
 	}
 
-	private IRekeningMuteerder getBankVanRekeningNummer(int rekeningNummer) throws NumberDoesntExistException, RuntimeException, RemoteException {
+	private IRekeningMuteerder getBankVanRekeningNummer(int rekeningNummer) throws NumberDoesntExistException, RuntimeException, RemoteException{
 		String bank = rekeningen.get(rekeningNummer);
 		if (bank != null) {
 			return getBankVanNaam(bank);
 		}
 		throw new NumberDoesntExistException("Kan bank niet vinden");
-
+		
 	}
 
 	private IRekeningMuteerder getBankVanNaam(String bankNaam) throws RuntimeException, RemoteException {
 		for (IRekeningMuteerder b : banken) {
-			if (b.getName().equals(bankNaam)) {
+			if (b.getName().equals(bankNaam)){
 				return b;
 			}
 		}

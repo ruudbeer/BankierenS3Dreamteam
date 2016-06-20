@@ -31,8 +31,8 @@ public class Bank extends UnicastRemoteObject implements IBank, IRekeningMuteerd
 	private ICentrale centrale;
 	
 	public Bank(String name) throws RemoteException, NotBoundException{
-		accounts = new HashMap<>();
-		clients = new ArrayList<>();
+		accounts = new HashMap<Integer, IRekeningTbvBank>();
+		clients = new ArrayList<IKlant>();
 		nieuwReknr = 100000000;
 		this.name = name;
 		
@@ -55,16 +55,14 @@ public class Bank extends UnicastRemoteObject implements IBank, IRekeningMuteerd
 
 		IKlant klant = getKlant(name, city);
 		IRekeningTbvBank account = null;
-		int nieuwNummer = 0;
 		try {
-			nieuwNummer = centrale.getNieuwRekeningNummer(this.name);
-			account = new Rekening(nieuwNummer, klant, Money.EURO);
+			account = new Rekening(nieuwReknr, klant, Money.EURO);
 		} catch (RemoteException ex) {
 			Logger.getLogger(Bank.class.getName()).log(Level.SEVERE, null, ex);
 		}
-		accounts.put(nieuwNummer, account);
-		System.out.println(account.getNr());
-		return nieuwNummer;
+		accounts.put(nieuwReknr, account);
+		nieuwReknr++;
+		return nieuwReknr - 1;
 	}
 
 	private IKlant getKlant(String name, String city) {
@@ -78,12 +76,10 @@ public class Bank extends UnicastRemoteObject implements IBank, IRekeningMuteerd
 		return klant;
 	}
 
-	@Override
 	public IRekening getRekening(int nr) {
 		return accounts.get(nr);
 	}
 
-	@Override
 	public synchronized boolean maakOver(int source, int destination, Money money)
 			throws NumberDoesntExistException {
 		if (source == destination) {
@@ -93,16 +89,32 @@ public class Bank extends UnicastRemoteObject implements IBank, IRekeningMuteerd
 		if (!money.isPositive()) {
 			throw new RuntimeException("money must be positive");
 		}
-		System.out.println("Ga nu proberen over te maken vanuit BANK");
-		try {
-			System.out.println("CENTRALE MAAK OVER");
-			centrale.maakOver(source, destination, money);
-			System.out.println("CENTRALE MAAK OVER GEDAAN");
-			return true;
-		} catch (RemoteException ex) {
-			Logger.getLogger(Bank.class.getName()).log(Level.SEVERE, null, ex);
+
+		IRekeningTbvBank source_account = (IRekeningTbvBank) getRekening(source);
+		if (source_account == null) {
+			throw new NumberDoesntExistException("account " + source
+					+ " unknown at " + name);
 		}
-		return false;
+
+		Money negative = Money.difference(new Money(0, money.getCurrency()),
+				money);
+		boolean success = source_account.muteer(negative);
+		if (!success) {
+			return false;
+		}
+
+		IRekeningTbvBank dest_account = (IRekeningTbvBank) getRekening(destination);
+		if (dest_account == null) {
+			throw new NumberDoesntExistException("account " + destination
+					+ " unknown at " + name);
+		}
+		success = dest_account.muteer(money);
+
+		if (!success) // rollback
+		{
+			source_account.muteer(money);
+		}
+		return success;
 	}
 
 	@Override
