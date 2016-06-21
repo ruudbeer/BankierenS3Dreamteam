@@ -28,13 +28,14 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import fontys.util.PropertieNamen;
 import java.io.Serializable;
+import java.rmi.server.UnicastRemoteObject;
 
 /**
  * FXML Controller class
  *
  * @author frankcoenen
  */
-public class BankierSessieController implements Initializable, IRemotePropertyListener
+public class BankierSessieController extends UnicastRemoteObject implements Initializable, IRemotePropertyListener
 {
 
 	@FXML
@@ -73,7 +74,9 @@ public class BankierSessieController implements Initializable, IRemotePropertyLi
 		
 		try
 		{
+                    System.out.println("stap3.5");
 			this.sessie.subscribeRemoteListener(this, PropertieNamen.SALDO);
+                        System.out.println("stap4");
 		}
 		catch (RemoteException ex)
 		{
@@ -86,7 +89,7 @@ public class BankierSessieController implements Initializable, IRemotePropertyLi
 		try
 		{
 			rekening = sessie.getRekening();
-			
+			                 System.out.println("stap5");
 			tfAccountNr.setText(rekening.getNr() + "");
 			tfBalance.setText(rekening.getSaldo() + "");
 			String eigenaar = rekening.getEigenaar().getNaam() + " te "

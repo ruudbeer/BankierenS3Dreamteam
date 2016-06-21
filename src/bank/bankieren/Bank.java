@@ -79,7 +79,7 @@ public class Bank extends UnicastRemoteObject implements IBank, IRekeningMuteerd
 	}
 
 	@Override
-	public IRekening getRekening(int nr) {
+	public IRekeningTbvBank getRekening(int nr) {
 		return accounts.get(nr);
 	}
 
@@ -112,11 +112,15 @@ public class Bank extends UnicastRemoteObject implements IBank, IRekeningMuteerd
 
 	@Override
 	public boolean muteer(int rekeningNummer, Money amount) {
-		Rekening rekening = (Rekening) getRekening(rekeningNummer);
+            System.out.println(rekeningNummer);
+            System.out.println(accounts);
+		IRekeningTbvBank rekening =  getRekening(rekeningNummer);
+                          
 		if (rekening != null) {
 			rekening.muteer(amount);
 			return true;
 		}
+                System.out.println("REKENING IS FALSE MATTIE");
 		return false;
 
 	}

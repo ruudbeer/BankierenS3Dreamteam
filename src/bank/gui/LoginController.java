@@ -61,11 +61,15 @@ public class LoginController implements Initializable {
     private void login(ActionEvent event) throws InvalidSessionException {
         try {
             sessie = balie.logIn(tfAccount.getText(), tfPassword.getText());
+            System.out.println(sessie);
+            System.out.println("hoihoihoi");
             if (sessie == null) {
                 taMessages.setText("accountname or password not correct");
             } else {
                 IRekening r = sessie.getRekening();
+                System.out.println("stap2");
                 System.out.println("Rekening" + r.getSaldo());
+                System.out.println("stap3");
                 application.gotoBankierSessie(balie, sessie);
             }
         } catch (RemoteException e1) {

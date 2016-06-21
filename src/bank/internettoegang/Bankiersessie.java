@@ -29,17 +29,21 @@ public class Bankiersessie extends UnicastRemoteObject implements
 	private Publisher publisher;
 
 	public Bankiersessie(int reknr, IBank bank) throws RemoteException {
+            System.out.println("test");
 		laatsteAanroep = System.currentTimeMillis();
 		this.reknr = reknr;
 		this.bank = bank;
 		
 		this.publisher = new Publisher();
+                System.out.println("test1");
 		this.publisher.registerProperty(PropertieNamen.SALDO);
+                System.out.println("test2");
 		addObserverToRekening();
 	}
 	
 	private void addObserverToRekening(){
 		Rekening rekening = (Rekening) bank.getRekening(reknr);
+                System.out.println(rekening);
 		rekening.addObserver(this);
 	}
 

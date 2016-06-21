@@ -111,6 +111,7 @@ public class BankierClient extends Application {
       protected void gotoBankierSessie(IBalie balie, IBankiersessie sessie) {
         try {
             BankierSessieController sessionController = (BankierSessieController) replaceSceneContent("BankierSessie.fxml");
+            System.out.println("stap3");
             sessionController.setApp(this, balie, sessie);
         } catch (Exception ex) {
             Logger.getLogger(BankierClient.class.getName()).log(Level.SEVERE, null, ex);
